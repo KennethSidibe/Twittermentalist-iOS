@@ -7,10 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4C30F48928639E4E0028164A /* TwitterSentimentAnalyzerModel.mlpackage in Sources */ = {isa = PBXBuildFile; fileRef = 4C30F48828639E4E0028164A /* TwitterSentimentAnalyzerModel.mlpackage */; };
+		4C30F48928639E4E0028164A /* SentimentAnalyzer.mlpackage in Sources */ = {isa = PBXBuildFile; fileRef = 4C30F48828639E4E0028164A /* SentimentAnalyzer.mlpackage */; };
 		4C30F48B2863A1D40028164A /* SentimentAnalyzerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C30F48A2863A1D40028164A /* SentimentAnalyzerModel.swift */; };
+		4C69DAE02863D56F00CE4D6C /* PredictionBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C69DADF2863D56F00CE4D6C /* PredictionBrain.swift */; };
+		4C6E0A772863F62500B0E7FB /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C6E0A762863F62400B0E7FB /* Constants.swift */; };
 		4C8AA3CF2863B01C0060489D /* credentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C8AA3CE2863B01C0060489D /* credentials.swift */; };
-		4CACE33228626E7C00D71E25 /* PredictionBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CACE33128626E7C00D71E25 /* PredictionBrain.swift */; };
 		4CACE33528626F8400D71E25 /* TwitterAPIKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4CACE33428626F8400D71E25 /* TwitterAPIKit */; };
 		4CF0E41B2863010F00951AB5 /* JSONStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF0E41A2863010F00951AB5 /* JSONStruct.swift */; };
 		AD9EC65020FE2EF4002AE9BF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD9EC64F20FE2EF4002AE9BF /* AppDelegate.swift */; };
@@ -22,10 +23,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		4C30F48828639E4E0028164A /* TwitterSentimentAnalyzerModel.mlpackage */ = {isa = PBXFileReference; lastKnownFileType = folder.mlpackage; name = TwitterSentimentAnalyzerModel.mlpackage; path = ../../TwitterSentimentAnalyzerModel.mlpackage; sourceTree = "<group>"; };
+		4C30F48828639E4E0028164A /* SentimentAnalyzer.mlpackage */ = {isa = PBXFileReference; lastKnownFileType = folder.mlpackage; name = SentimentAnalyzer.mlpackage; path = ../../SentimentAnalyzer.mlpackage; sourceTree = "<group>"; };
 		4C30F48A2863A1D40028164A /* SentimentAnalyzerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentimentAnalyzerModel.swift; sourceTree = "<group>"; };
+		4C69DADF2863D56F00CE4D6C /* PredictionBrain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PredictionBrain.swift; sourceTree = "<group>"; };
+		4C6E0A762863F62400B0E7FB /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		4C8AA3CE2863B01C0060489D /* credentials.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = credentials.swift; sourceTree = "<group>"; };
-		4CACE33128626E7C00D71E25 /* PredictionBrain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredictionBrain.swift; sourceTree = "<group>"; };
 		4CF0E41A2863010F00951AB5 /* JSONStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONStruct.swift; sourceTree = "<group>"; };
 		AD9EC64C20FE2EF4002AE9BF /* Twittermenti.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Twittermenti.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD9EC64F20FE2EF4002AE9BF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -52,6 +54,7 @@
 		AD9EC64320FE2EF4002AE9BF = {
 			isa = PBXGroup;
 			children = (
+				4C6E0A762863F62400B0E7FB /* Constants.swift */,
 				AD9EC66120FE319A002AE9BF /* README.md */,
 				AD9EC64E20FE2EF4002AE9BF /* Twittermenti */,
 				AD9EC64D20FE2EF4002AE9BF /* Products */,
@@ -71,11 +74,11 @@
 			children = (
 				4C8AA3CE2863B01C0060489D /* credentials.swift */,
 				4C30F48A2863A1D40028164A /* SentimentAnalyzerModel.swift */,
-				4CACE33128626E7C00D71E25 /* PredictionBrain.swift */,
 				4CF0E41A2863010F00951AB5 /* JSONStruct.swift */,
+				4C69DADF2863D56F00CE4D6C /* PredictionBrain.swift */,
 				AD9EC64F20FE2EF4002AE9BF /* AppDelegate.swift */,
 				AD9EC65120FE2EF4002AE9BF /* ViewController.swift */,
-				4C30F48828639E4E0028164A /* TwitterSentimentAnalyzerModel.mlpackage */,
+				4C30F48828639E4E0028164A /* SentimentAnalyzer.mlpackage */,
 				AD9EC65320FE2EF4002AE9BF /* Main.storyboard */,
 				AD9EC65620FE2EF7002AE9BF /* Assets.xcassets */,
 				AD9EC65820FE2EF7002AE9BF /* LaunchScreen.storyboard */,
@@ -163,12 +166,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				4CF0E41B2863010F00951AB5 /* JSONStruct.swift in Sources */,
-				4CACE33228626E7C00D71E25 /* PredictionBrain.swift in Sources */,
+				4C69DAE02863D56F00CE4D6C /* PredictionBrain.swift in Sources */,
 				AD9EC65220FE2EF4002AE9BF /* ViewController.swift in Sources */,
 				4C30F48B2863A1D40028164A /* SentimentAnalyzerModel.swift in Sources */,
 				AD9EC65020FE2EF4002AE9BF /* AppDelegate.swift in Sources */,
 				4C8AA3CF2863B01C0060489D /* credentials.swift in Sources */,
-				4C30F48928639E4E0028164A /* TwitterSentimentAnalyzerModel.mlpackage in Sources */,
+				4C30F48928639E4E0028164A /* SentimentAnalyzer.mlpackage in Sources */,
+				4C6E0A772863F62500B0E7FB /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -325,7 +329,7 @@
 				COREML_CODEGEN_SWIFT_GLOBAL_MODULE = YES;
 				DEVELOPMENT_TEAM = S55Y88F36A;
 				INFOPLIST_FILE = Twittermenti/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -346,7 +350,7 @@
 				COREML_CODEGEN_SWIFT_GLOBAL_MODULE = YES;
 				DEVELOPMENT_TEAM = S55Y88F36A;
 				INFOPLIST_FILE = Twittermenti/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

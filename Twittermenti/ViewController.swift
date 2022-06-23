@@ -7,11 +7,10 @@
 //
 
 import UIKit
-import TwitterAPIKit
-import AuthenticationServices
+import NaturalLanguage
 import CoreML
-let appleID:String = "380749300"
 
+let appleID:String = "380749300"
 
 class ViewController: UIViewController, PredictionBrainDelegate {
     
@@ -33,13 +32,35 @@ class ViewController: UIViewController, PredictionBrainDelegate {
         predictBrain.retrieveMentionsTweet(username: text)
     }
     
-    func didFinishTask() {
-        print("got the shit")
+    func finishedFetchingTweets() {
         
-        for tweet in predictBrain.tweetsArray {
-            print(tweet)
+        if let predictionsIn = predictBrain.predictTweetsSentiment(tweets: predictBrain.tweetsArray) {
+            let countLabel = predictBrain.countAllLabels(predictions: predictionsIn)
+            
+            setEmoji(emotions: countLabel)
+        } else {
+            sentimentLabel.text = "🔨"
         }
-        print(predictBrain.tweetsArray.count)
+        
+    }
+    
+    func setEmoji(emotions:[String:Int]) {
+        let dominantEmotionScore = emotions.max {
+            $0.value < $1.value
+        }
+        
+        let dominantEmotion = dominantEmotionScore!.key
+        
+        if dominantEmotion == "Neg" {
+            sentimentLabel.text = "😡"
+        } else if dominantEmotion == "Pos" {
+            sentimentLabel.text = "🤩"
+        } else if dominantEmotion == "Neutral" {
+            sentimentLabel.text = "🙂"
+        } else {
+            sentimentLabel.text = "🙃"
+        }
+        
     }
     
 }

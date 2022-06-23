@@ -6,14 +6,13 @@
 //  Copyright © 2022 London App Brewery. All rights reserved.
 //
 
-protocol PredictionBrainDelegate {
-    func didFinishTask()
-}
-
 import Foundation
-import TwitterAPIKit
-import AuthenticationServices
+import NaturalLanguage
+import CoreML
 
+protocol PredictionBrainDelegate {
+    func finishedFetchingTweets()
+}
 
 class PredictionBrain {
     
@@ -22,8 +21,12 @@ class PredictionBrain {
     var userID:String?
     var tweetsArray:[String] = []
     private let errorConstant = "ERROR_INVALID_NAME"
+    private let maxTweets = "100"
+    private let labels = ["Pos", "Neg", "Neutral"]
     
     let baseUrl = "https://api.twitter.com/2/"
+    
+    //MARK: - Retrieving tweets
     
     func retrieveMentionsTweet(username: String) {
         
@@ -41,18 +44,17 @@ class PredictionBrain {
     
     func retrieveMentionsTweetOf(id:String) {
         
-        
         let baseUrl = "https://api.twitter.com/2/"
-        let endpoint = "users/\(appleID)/mentions"
+        let endpoint = "users/\(id)/mentions"
         
         let requestUrl = baseUrl + endpoint
         
-        
         performTimelineRequest(urlString: requestUrl) { response in
+            
             self.tweetsArray = response
             
             DispatchQueue.main.async {
-                self.delegate?.didFinishTask()
+                self.delegate?.finishedFetchingTweets()
             }
         }
         
@@ -76,10 +78,12 @@ class PredictionBrain {
         }
     }
     
+    //MARK: - performing GET Request
+    
     func performTimelineRequest(urlString: String,  completionHandler: @escaping (_ response: [String]) -> Void) {
         
         let queryItems = [
-            URLQueryItem(name: "max_results", value: "100"),
+            URLQueryItem(name: "max_results", value: maxTweets),
             URLQueryItem(name: "tweet.fields", value: "lang")
         ]
         var urlComponents = URLComponents(string: urlString)!
@@ -144,6 +148,8 @@ class PredictionBrain {
         task.resume()
     }
     
+    //MARK: - JSON Parsing
+    
     func parseJSON(tweetMentionsData: Data) -> [tweetMentions]? {
         
         let decoder = JSONDecoder()
@@ -177,20 +183,102 @@ class PredictionBrain {
         }
     }
     
-    func parseJSON(errorData: Data) -> String? {
-        let decoder = JSONDecoder()
-
-        let JSONText = String(data: errorData, encoding: .utf8)
-        print(JSONText)
-
+    //MARK: - predict text sentiment
+    
+    func predictTweetSentiment(tweet:String) -> String? {
+        
         do {
-            let decodedData = try decoder.decode(Errors.self, from: errorData)
-            let errorType = decodedData.errors
-            return errorType[0].title
+            let classifier = try SentimentAnalyzer(configuration: MLModelConfiguration())
+            
+            do {
+                let sentiment = try classifier.prediction(text: tweet)
+                return sentiment.label
+            } catch {
+                print("No prediction could have been made from text, \(error)")
+            }
+            
+            
         } catch {
-            print("error of parsing error message\(error)")
+            print("Error caught while loading the MLModel. \(error)")
+        }
+        return nil
+    }
+    
+    func predictTweetsSentiment(tweets: [String]) -> [PredictionOutput]? {
+        
+        var predictions:[PredictionOutput] = [PredictionOutput]()
+        
+        do {
+            
+            let mlModel = try SentimentAnalyzer(configuration: MLModelConfiguration()).model
+            
+            let classifier = try NLModel(mlModel: mlModel)
+            
+            for tweet in tweets {
+                
+                let sentiment = classifier.predictedLabelHypotheses(for: tweet, maximumCount: 1)
+                
+                let label = sentiment.keys.first!
+                let score = sentiment.values.first!
+                
+                let prediction = PredictionOutput(label: label, score: score)
+                
+                predictions.append(prediction)
+            }
+            
+            let counts = countAllLabels(predictions: predictions)
+            print(counts)
+            return predictions
+            
+        } catch {
+            print("Error caught while loading the MLModel. \(error)")
             return nil
         }
     }
     
+    //MARK: - Scoring the predictions
+    
+    func countLabel(label:String, predictions:[PredictionOutput]) -> Int? {
+        
+        if !labels.contains(label) {
+            return nil
+        }
+        
+        var count = 0
+        
+        for prediction in predictions {
+            if prediction.label == label {
+                count += 1
+            }
+        }
+        
+        return count
+    }
+    
+    func countAllLabels(predictions:[PredictionOutput]) -> [String : Int] {
+        
+        var labelsCount = [
+            "Pos" : 0,
+            "Neg" : 0,
+            "Neutral" : 0
+        ]
+        
+        var i = 0
+        
+        for label in labels {
+            let key = labels[i]
+            labelsCount[key] = countLabel(label: label, predictions: predictions)
+            i += 1
+        }
+        
+        return labelsCount
+    }
+    
+}
+
+//MARK: - Struct to store prediction outputs
+
+struct PredictionOutput {
+    let label:String
+    let score:Double
 }

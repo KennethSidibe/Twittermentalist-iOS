@@ -26,12 +26,3 @@ struct UserID:Codable {
 struct UserIDData:Codable {
     let data: UserID
 }
-
-struct Errors:Decodable {
-    let errors: [Error]
-}
-
-struct Error:Decodable {
-    let title:String
-    let detail:String
-}
