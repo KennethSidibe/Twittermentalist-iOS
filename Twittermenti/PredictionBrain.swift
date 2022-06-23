@@ -12,31 +12,42 @@ import CoreML
 
 protocol PredictionBrainDelegate {
     func finishedFetchingTweets()
+    func signalInvalidUsername()
+}
+
+enum FetchingError:Error {
+    case invalidUsername
 }
 
 class PredictionBrain {
     
-    var userName:String?
+    private var userName:String?
     var delegate: PredictionBrainDelegate?
-    var userID:String?
+    private var userID:String?
     var tweetsArray:[String] = []
     private let errorConstant = "ERROR_INVALID_NAME"
-    private let maxTweets = "100"
+    private let maxTweets = "20"
     private let labels = ["Pos", "Neg", "Neutral"]
     
-    let baseUrl = "https://api.twitter.com/2/"
+    private let baseUrl = "https://api.twitter.com/2/"
     
     //MARK: - Retrieving tweets
     
     func retrieveMentionsTweet(username: String) {
         
         retrieveUserId(userName: username) { response in
+            
             if let userID = response {
                 
                 self.retrieveMentionsTweetOf(id: userID)
                 
             } else {
+                
                 print("username invalid")
+                
+                DispatchQueue.main.async {
+                    self.delegate?.signalInvalidUsername()
+                }
             }
             
         }
@@ -69,11 +80,14 @@ class PredictionBrain {
         
         
         performUserIDRequest(urlString: requestUrl) { response in
+            
             if response != self.errorConstant {
+                
                 self.userID = response
                 completionHandler(response)
+                
             } else {
-                completionHandler(self.errorConstant)
+                completionHandler(nil)
             }
         }
     }
@@ -112,8 +126,6 @@ class PredictionBrain {
                     completionHandler(englishTweets)
                 }
                 
-                
-                
             } else {
                 print("Error while fetching the data, \(error)")
             }
@@ -124,7 +136,13 @@ class PredictionBrain {
     
     func performUserIDRequest(urlString: String,  completionHandler: @escaping (_ response: String?) -> Void) {
         
-        var request = URLRequest(url: URL(string: urlString)!)
+        guard let url = URL(string: urlString) else {
+            completionHandler(self.errorConstant)
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        
         request.allHTTPHeaderFields = [
             "Authorization" : "Bearer \(bearerToken)",
         ]
@@ -178,7 +196,6 @@ class PredictionBrain {
             return userID
             
         } catch {
-            print("Error caught while parsing JSON user ID, \(error)")
             return nil
         }
     }
@@ -221,7 +238,7 @@ class PredictionBrain {
                 let label = sentiment.keys.first!
                 let score = sentiment.values.first!
                 
-                let prediction = PredictionOutput(label: label, score: score)
+                let prediction = PredictionOutput(tweet:tweet, label: label, score: score)
                 
                 predictions.append(prediction)
             }
@@ -238,40 +255,80 @@ class PredictionBrain {
     
     //MARK: - Scoring the predictions
     
-    func countLabel(label:String, predictions:[PredictionOutput]) -> Int? {
+    func countLabel(label:String, predictions:[PredictionOutput]) -> (count:Int, tweet:String)? {
+        
+        var highestEmotion = ""
+        var highestScore:Double = -1.0
         
         if !labels.contains(label) {
+            print("Label is incorrect")
             return nil
         }
         
         var count = 0
         
         for prediction in predictions {
+            
             if prediction.label == label {
+                
+                if prediction.score > highestScore {
+                    highestScore = prediction.score
+                    highestEmotion = prediction.tweet
+                }
+                
                 count += 1
             }
         }
         
-        return count
+        return (count:count, tweet:highestEmotion)
     }
     
-    func countAllLabels(predictions:[PredictionOutput]) -> [String : Int] {
+    func countAllLabels(predictions:[PredictionOutput]) -> CountsWithEmotion? {
         
         var labelsCount = [
             "Pos" : 0,
             "Neg" : 0,
             "Neutral" : 0
         ]
+        var labelsEmotion = [
+            "Pos" : "",
+            "Neg" : "",
+            "Neutral" : ""
+        ]
         
         var i = 0
         
-        for label in labels {
+        for _ in labels {
+            
             let key = labels[i]
-            labelsCount[key] = countLabel(label: label, predictions: predictions)
-            i += 1
+            
+            if let countLabelAndEmotion = countLabel(label: key, predictions: predictions) {
+                
+                labelsCount[key] = countLabelAndEmotion.count
+                labelsEmotion[key] = countLabelAndEmotion.tweet
+                
+                i += 1
+                
+            } else {
+                return nil
+            }
+            
+            
         }
         
-        return labelsCount
+        return CountsWithEmotion(labelsCount: labelsCount, strongestTweet: labelsEmotion)
+    }
+    
+    func whatsTheStrongestEmotion(labelsCount:[String : Int]) -> String {
+        let dominantEmotionScore = labelsCount.max {
+            $0.value < $1.value
+        }
+        
+        return dominantEmotionScore!.key
+    }
+    
+    func retrieveStrongestTweet(label:String, emotionDict: [String : String]) -> String {
+        return emotionDict[label]!
     }
     
 }
@@ -279,6 +336,12 @@ class PredictionBrain {
 //MARK: - Struct to store prediction outputs
 
 struct PredictionOutput {
+    let tweet:String
     let label:String
     let score:Double
+}
+
+struct CountsWithEmotion {
+    let labelsCount: [String : Int]
+    let strongestTweet:[String : String]
 }

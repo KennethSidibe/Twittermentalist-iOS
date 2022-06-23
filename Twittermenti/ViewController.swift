@@ -18,47 +18,86 @@ class ViewController: UIViewController, PredictionBrainDelegate {
     @IBOutlet weak var backgroundView: UIView!
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var sentimentLabel: UILabel!
-    var predictBrain = PredictionBrain()
+    var brain = PredictionBrain()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        predictBrain.delegate = self
+        brain.delegate = self
         
     }
 
     @IBAction func predictPressed(_ sender: Any) {
-        let text = textField.text!
-        predictBrain.retrieveMentionsTweet(username: text)
+        
+        let username = textField.text!
+        
+        if !username.isEmpty {
+            brain.retrieveMentionsTweet(username: username)
+        } else {
+            print("text field is empty")
+        }
+        
     }
     
     func finishedFetchingTweets() {
         
-        if let predictionsIn = predictBrain.predictTweetsSentiment(tweets: predictBrain.tweetsArray) {
-            let countLabel = predictBrain.countAllLabels(predictions: predictionsIn)
+        if let predictions = brain.predictTweetsSentiment(tweets: brain.tweetsArray) {
             
-            setEmoji(emotions: countLabel)
-        } else {
-            sentimentLabel.text = "🔨"
+            if let countsWithEmotion = brain.countAllLabels(predictions: predictions) {
+                
+                let counts = countsWithEmotion.labelsCount
+                let emotions = countsWithEmotion.strongestTweet
+                
+                let strongestLabel = brain.whatsTheStrongestEmotion(labelsCount: counts)
+                let strongestTweet = brain.retrieveStrongestTweet(label: strongestLabel, emotionDict: emotions)
+                
+                print(strongestTweet)
+            }
+            
         }
         
     }
     
-    func setEmoji(emotions:[String:Int]) {
-        let dominantEmotionScore = emotions.max {
-            $0.value < $1.value
-        }
+    func signalInvalidUsername() {
+        sentimentLabel.text = "🔨"
+    }
+    
+    func setEmoji(counts: [String:Int] ) {
         
-        let dominantEmotion = dominantEmotionScore!.key
+        let positiveLabel = counts["Pos"]!
+        let negativeLabel = counts["Neg"]!
         
-        if dominantEmotion == "Neg" {
-            sentimentLabel.text = "😡"
-        } else if dominantEmotion == "Pos" {
+        let score = positiveLabel - negativeLabel
+        
+        if score > 50 {
             sentimentLabel.text = "🤩"
-        } else if dominantEmotion == "Neutral" {
-            sentimentLabel.text = "🙂"
-        } else {
-            sentimentLabel.text = "🙃"
+        }
+        else if score > 20 {
+            sentimentLabel.text = "😍"
+        }
+        else if score > 10 {
+            sentimentLabel.text = "😄"
+        }
+        else if score == 0 {
+            sentimentLabel.text = "🫥"
+        }
+        else if score < -50 {
+            sentimentLabel.text = "🤮"
+        }
+        else if score < -20 {
+            sentimentLabel.text = "🤬"
+        }
+        else if score < -10 {
+            sentimentLabel.text = "😑"
+        }
+        else if score < -5 {
+            sentimentLabel.text = "🫤"
+        }
+        else if score < 0 {
+            sentimentLabel.text = "😠"
+        }
+        else {
+            sentimentLabel.text = "🫠"
         }
         
     }
