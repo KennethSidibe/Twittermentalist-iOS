@@ -14,7 +14,7 @@ let appleID:String = "380749300"
 
 class ViewController: UIViewController, PredictionBrainDelegate {
     
-    
+    @IBOutlet weak var tweetLabel: UILabel!
     @IBOutlet weak var backgroundView: UIView!
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var sentimentLabel: UILabel!
@@ -24,7 +24,6 @@ class ViewController: UIViewController, PredictionBrainDelegate {
         super.viewDidLoad()
         
         brain.delegate = self
-        
     }
 
     @IBAction func predictPressed(_ sender: Any) {
@@ -39,19 +38,21 @@ class ViewController: UIViewController, PredictionBrainDelegate {
         
     }
     
+    
     func finishedFetchingTweets() {
         
         if let predictions = brain.predictTweetsSentiment(tweets: brain.tweetsArray) {
             
-            if let countsWithEmotion = brain.countAllLabels(predictions: predictions) {
+            if let countsWithEmotion = brain.countAllLabels(with: predictions) {
                 
                 let counts = countsWithEmotion.labelsCount
-                let emotions = countsWithEmotion.strongestTweet
                 
-                let strongestLabel = brain.whatsTheStrongestEmotion(labelsCount: counts)
-                let strongestTweet = brain.retrieveStrongestTweet(label: strongestLabel, emotionDict: emotions)
+                setEmoji(counts: counts)
                 
-                print(strongestTweet)
+                let tweetWithEmotion = brain.retrieveStrongestTweet(with: countsWithEmotion)
+                
+                setTweetLabel(with: tweetWithEmotion)
+                
             }
             
         }
@@ -78,6 +79,9 @@ class ViewController: UIViewController, PredictionBrainDelegate {
         else if score > 10 {
             sentimentLabel.text = "😄"
         }
+        else if score > 0 {
+            sentimentLabel.text = "🙂"
+        }
         else if score == 0 {
             sentimentLabel.text = "🫥"
         }
@@ -99,6 +103,17 @@ class ViewController: UIViewController, PredictionBrainDelegate {
         else {
             sentimentLabel.text = "🫠"
         }
+        
+    }
+    
+    func setTweetLabel(with data:(tweet: String, emotion: String)) {
+        
+        let emotion = "most " + data.emotion + "itive"
+        
+        let tweetStrongestEmotion = "Here is the " + emotion + " mentions from " + brain.getUsername()! + "\n" + data.tweet
+        
+        tweetLabel.text = tweetStrongestEmotion
+        tweetLabel.font = UIFont.boldSystemFont(ofSize: 16.0)
         
     }
     

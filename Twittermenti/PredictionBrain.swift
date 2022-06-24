@@ -34,11 +34,11 @@ class PredictionBrain {
     //MARK: - Retrieving tweets
     
     func retrieveMentionsTweet(username: String) {
-        
+        self.userName = username
         retrieveUserId(userName: username) { response in
             
             if let userID = response {
-                
+                self.userID = userID
                 self.retrieveMentionsTweetOf(id: userID)
                 
             } else {
@@ -243,8 +243,7 @@ class PredictionBrain {
                 predictions.append(prediction)
             }
             
-            let counts = countAllLabels(predictions: predictions)
-            print(counts)
+            let counts = countAllLabels(with: predictions)
             return predictions
             
         } catch {
@@ -283,7 +282,7 @@ class PredictionBrain {
         return (count:count, tweet:highestEmotion)
     }
     
-    func countAllLabels(predictions:[PredictionOutput]) -> CountsWithEmotion? {
+    func countAllLabels(with predictions:[PredictionOutput]) -> CountsWithEmotion? {
         
         var labelsCount = [
             "Pos" : 0,
@@ -327,8 +326,17 @@ class PredictionBrain {
         return dominantEmotionScore!.key
     }
     
-    func retrieveStrongestTweet(label:String, emotionDict: [String : String]) -> String {
-        return emotionDict[label]!
+    func retrieveStrongestTweet(with countsEmotions:CountsWithEmotion) -> (tweet:String, emotion:String) {
+        let counts = countsEmotions.labelsCount
+        let strongestLabel = self.whatsTheStrongestEmotion(labelsCount: counts)
+        
+        let tweet = countsEmotions.strongestTweet[strongestLabel]!
+        
+        
+        return (tweet:tweet, emotion:strongestLabel)
+    }
+    func getUsername() -> String? {
+        return self.userName
     }
     
 }
@@ -340,6 +348,8 @@ struct PredictionOutput {
     let label:String
     let score:Double
 }
+
+//MARK: - Struct to store labels alongside their occurence and the strongest prediction score
 
 struct CountsWithEmotion {
     let labelsCount: [String : Int]
