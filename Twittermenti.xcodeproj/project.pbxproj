@@ -8,10 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		4C30F48928639E4E0028164A /* SentimentAnalyzer.mlpackage in Sources */ = {isa = PBXBuildFile; fileRef = 4C30F48828639E4E0028164A /* SentimentAnalyzer.mlpackage */; };
-		4C30F48B2863A1D40028164A /* SentimentAnalyzerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C30F48A2863A1D40028164A /* SentimentAnalyzerModel.swift */; };
+		4C4BF87A2869706A000AC23F /* credentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4BF8792869706A000AC23F /* credentials.swift */; };
+		4C4BF880286970B9000AC23F /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 4C4BF87F286970B9000AC23F /* IQKeyboardManagerSwift */; };
 		4C69DAE02863D56F00CE4D6C /* PredictionBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C69DADF2863D56F00CE4D6C /* PredictionBrain.swift */; };
 		4C6E0A772863F62500B0E7FB /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C6E0A762863F62400B0E7FB /* Constants.swift */; };
-		4C8AA3CF2863B01C0060489D /* credentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C8AA3CE2863B01C0060489D /* credentials.swift */; };
 		4CACE33528626F8400D71E25 /* TwitterAPIKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4CACE33428626F8400D71E25 /* TwitterAPIKit */; };
 		4CF0E41B2863010F00951AB5 /* JSONStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF0E41A2863010F00951AB5 /* JSONStruct.swift */; };
 		AD9EC65020FE2EF4002AE9BF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD9EC64F20FE2EF4002AE9BF /* AppDelegate.swift */; };
@@ -24,10 +24,9 @@
 
 /* Begin PBXFileReference section */
 		4C30F48828639E4E0028164A /* SentimentAnalyzer.mlpackage */ = {isa = PBXFileReference; lastKnownFileType = folder.mlpackage; name = SentimentAnalyzer.mlpackage; path = ../../SentimentAnalyzer.mlpackage; sourceTree = "<group>"; };
-		4C30F48A2863A1D40028164A /* SentimentAnalyzerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentimentAnalyzerModel.swift; sourceTree = "<group>"; };
+		4C4BF8792869706A000AC23F /* credentials.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = credentials.swift; sourceTree = "<group>"; };
 		4C69DADF2863D56F00CE4D6C /* PredictionBrain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PredictionBrain.swift; sourceTree = "<group>"; };
 		4C6E0A762863F62400B0E7FB /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		4C8AA3CE2863B01C0060489D /* credentials.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = credentials.swift; sourceTree = "<group>"; };
 		4CF0E41A2863010F00951AB5 /* JSONStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONStruct.swift; sourceTree = "<group>"; };
 		AD9EC64C20FE2EF4002AE9BF /* Twittermenti.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Twittermenti.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD9EC64F20FE2EF4002AE9BF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -45,16 +44,43 @@
 			buildActionMask = 2147483647;
 			files = (
 				4CACE33528626F8400D71E25 /* TwitterAPIKit in Frameworks */,
+				4C4BF880286970B9000AC23F /* IQKeyboardManagerSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		AD9EC64320FE2EF4002AE9BF = {
+		4C4BF87B28697077000AC23F /* Model */ = {
 			isa = PBXGroup;
 			children = (
 				4C6E0A762863F62400B0E7FB /* Constants.swift */,
+				4C4BF8792869706A000AC23F /* credentials.swift */,
+				4CF0E41A2863010F00951AB5 /* JSONStruct.swift */,
+				4C69DADF2863D56F00CE4D6C /* PredictionBrain.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		4C4BF87C28697083000AC23F /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				AD9EC65120FE2EF4002AE9BF /* ViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		4C4BF87D28697088000AC23F /* View */ = {
+			isa = PBXGroup;
+			children = (
+				AD9EC65320FE2EF4002AE9BF /* Main.storyboard */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		AD9EC64320FE2EF4002AE9BF = {
+			isa = PBXGroup;
+			children = (
 				AD9EC66120FE319A002AE9BF /* README.md */,
 				AD9EC64E20FE2EF4002AE9BF /* Twittermenti */,
 				AD9EC64D20FE2EF4002AE9BF /* Products */,
@@ -72,14 +98,11 @@
 		AD9EC64E20FE2EF4002AE9BF /* Twittermenti */ = {
 			isa = PBXGroup;
 			children = (
-				4C8AA3CE2863B01C0060489D /* credentials.swift */,
-				4C30F48A2863A1D40028164A /* SentimentAnalyzerModel.swift */,
-				4CF0E41A2863010F00951AB5 /* JSONStruct.swift */,
-				4C69DADF2863D56F00CE4D6C /* PredictionBrain.swift */,
 				AD9EC64F20FE2EF4002AE9BF /* AppDelegate.swift */,
-				AD9EC65120FE2EF4002AE9BF /* ViewController.swift */,
+				4C4BF87B28697077000AC23F /* Model */,
+				4C4BF87D28697088000AC23F /* View */,
+				4C4BF87C28697083000AC23F /* Controller */,
 				4C30F48828639E4E0028164A /* SentimentAnalyzer.mlpackage */,
-				AD9EC65320FE2EF4002AE9BF /* Main.storyboard */,
 				AD9EC65620FE2EF7002AE9BF /* Assets.xcassets */,
 				AD9EC65820FE2EF7002AE9BF /* LaunchScreen.storyboard */,
 				AD9EC65B20FE2EF7002AE9BF /* Info.plist */,
@@ -105,6 +128,7 @@
 			name = Twittermenti;
 			packageProductDependencies = (
 				4CACE33428626F8400D71E25 /* TwitterAPIKit */,
+				4C4BF87F286970B9000AC23F /* IQKeyboardManagerSwift */,
 			);
 			productName = Twittermenti;
 			productReference = AD9EC64C20FE2EF4002AE9BF /* Twittermenti.app */;
@@ -136,6 +160,7 @@
 			mainGroup = AD9EC64320FE2EF4002AE9BF;
 			packageReferences = (
 				4CACE33328626F8400D71E25 /* XCRemoteSwiftPackageReference "TwitterAPIKit" */,
+				4C4BF87E286970B9000AC23F /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
 			);
 			productRefGroup = AD9EC64D20FE2EF4002AE9BF /* Products */;
 			projectDirPath = "";
@@ -167,10 +192,9 @@
 			files = (
 				4CF0E41B2863010F00951AB5 /* JSONStruct.swift in Sources */,
 				4C69DAE02863D56F00CE4D6C /* PredictionBrain.swift in Sources */,
+				4C4BF87A2869706A000AC23F /* credentials.swift in Sources */,
 				AD9EC65220FE2EF4002AE9BF /* ViewController.swift in Sources */,
-				4C30F48B2863A1D40028164A /* SentimentAnalyzerModel.swift in Sources */,
 				AD9EC65020FE2EF4002AE9BF /* AppDelegate.swift in Sources */,
-				4C8AA3CF2863B01C0060489D /* credentials.swift in Sources */,
 				4C30F48928639E4E0028164A /* SentimentAnalyzer.mlpackage in Sources */,
 				4C6E0A772863F62500B0E7FB /* Constants.swift in Sources */,
 			);
@@ -386,6 +410,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		4C4BF87E286970B9000AC23F /* XCRemoteSwiftPackageReference "IQKeyboardManager" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/hackiftekhar/IQKeyboardManager";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		4CACE33328626F8400D71E25 /* XCRemoteSwiftPackageReference "TwitterAPIKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mironal/TwitterAPIKit.git";
@@ -397,6 +429,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		4C4BF87F286970B9000AC23F /* IQKeyboardManagerSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4C4BF87E286970B9000AC23F /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
+			productName = IQKeyboardManagerSwift;
+		};
 		4CACE33428626F8400D71E25 /* TwitterAPIKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 4CACE33328626F8400D71E25 /* XCRemoteSwiftPackageReference "TwitterAPIKit" */;

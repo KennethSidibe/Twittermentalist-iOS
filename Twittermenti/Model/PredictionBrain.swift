@@ -15,10 +15,6 @@ protocol PredictionBrainDelegate {
     func signalInvalidUsername()
 }
 
-enum FetchingError:Error {
-    case invalidUsername
-}
-
 class PredictionBrain {
     
     private var userName:String?

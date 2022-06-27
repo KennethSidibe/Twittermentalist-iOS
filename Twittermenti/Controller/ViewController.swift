@@ -24,18 +24,11 @@ class ViewController: UIViewController, PredictionBrainDelegate {
         super.viewDidLoad()
         
         brain.delegate = self
+        self.textField.delegate = self
     }
 
     @IBAction func predictPressed(_ sender: Any) {
-        
-        let username = textField.text!
-        
-        if !username.isEmpty {
-            brain.retrieveMentionsTweet(username: username)
-        } else {
-            print("text field is empty")
-        }
-        
+        perfomPredict()
     }
     
     
@@ -61,6 +54,18 @@ class ViewController: UIViewController, PredictionBrainDelegate {
     
     func signalInvalidUsername() {
         sentimentLabel.text = "🔨"
+    }
+    
+    func perfomPredict() {
+        
+        let username = textField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        if !username.isEmpty {
+            brain.retrieveMentionsTweet(username: username)
+        } else {
+            print("text field is empty")
+        }
+        
     }
     
     func setEmoji(counts: [String:Int] ) {
@@ -117,5 +122,19 @@ class ViewController: UIViewController, PredictionBrainDelegate {
         
     }
     
+}
+
+//MARK: - UIText field delegate method
+
+extension ViewController: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        
+        textField.resignFirstResponder()
+        perfomPredict()
+        
+        return true
+        
+    }
 }
 
